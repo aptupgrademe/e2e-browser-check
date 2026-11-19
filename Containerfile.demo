@@ -1,0 +1,4 @@
+# Demo image: the check image plus a screen recorder and a tool that moves the real mouse pointer.
+FROM localhost/local/e2e-check:latest
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg xdotool fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*

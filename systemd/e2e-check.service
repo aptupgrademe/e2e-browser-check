@@ -1,0 +1,9 @@
+# ~/.config/systemd/user/e2e-check.service - alternative to cron
+[Unit]
+Description=End-to-end browser checks (Nextcloud + Collabora, website search)
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/e2e-check
+ExecStart=/usr/bin/python3 -I %h/e2e-check/run.py
+TimeoutStartSec=30min

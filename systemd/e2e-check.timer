@@ -1,0 +1,12 @@
+# ~/.config/systemd/user/e2e-check.timer
+# systemctl --user daemon-reload && systemctl --user enable --now e2e-check.timer
+[Unit]
+Description=Run the end-to-end checks twice a day
+
+[Timer]
+OnCalendar=*-*-* 06,18:57
+RandomizedDelaySec=2min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
