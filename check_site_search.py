@@ -58,7 +58,14 @@ def run(page):
     img = page.locator(SEL["article"] + " img").first
     img.wait_for(timeout=15000)
     img.scroll_into_view_if_needed()
-    page.wait_for_function("img => img.complete && img.naturalWidth > 0", arg=img.element_handle(), timeout=15000)
+    # Poll from Python: page.wait_for_function() re-checks inside the page via eval(), which a strict
+    # Content-Security-Policy (script-src without 'unsafe-eval') refuses - it only passed when the image
+    # was already loaded at the first check. locator.evaluate() goes through the DevTools protocol instead.
+    deadline = time.monotonic() + 15
+    while not img.evaluate("el => el.complete && el.naturalWidth > 0"):
+        if time.monotonic() > deadline:
+            raise AssertionError("article image did not load within 15 s")
+        page.wait_for_timeout(200)
     done("page opened", t)
 
 
